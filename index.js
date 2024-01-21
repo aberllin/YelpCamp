@@ -15,7 +15,8 @@ const LocalStrategy = require('passport-local');
 const User = require('./src/models/user');
 
 /** ----------- MONGOOSE CONNECTION ----------- */
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+const dbName = 'yelp-camp';
+mongoose.connect(`mongodb://localhost:27017/${dbName}`);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error'));
 db.once('open', () => console.log('Database connected!'));
@@ -40,6 +41,7 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 
+/** PASSPORT SHINANNIGANS  */
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -67,10 +69,12 @@ app.get('/', (req, res) => {
   res.send('Home');
 });
 
+/** For the unhandled routes send Page is not found error to the next middleware */
 app.all('*', (req, res, next) => {
   next(new ExpressError(404, `Page is not found`));
 });
 
+/** Is responsible for all passed errors and displaying the error view */
 app.use((err, req, res, next) => {
   if (!err.message) {
     err.message = 'Oops, something went wrong!';

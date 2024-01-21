@@ -9,6 +9,10 @@ const CampgroundSchema = Schema({
   location: String,
   image: String,
   price: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -17,6 +21,7 @@ const CampgroundSchema = Schema({
   ],
 });
 
+/** Delete assosiated reviews after campground is removed */
 CampgroundSchema.post('findOneAndDelete', async (data) => {
   if (data) {
     await Review.deleteMany({

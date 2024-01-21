@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const { isLoggedIn } = require('../../middleware');
+const { isLoggedIn, isAuthor } = require('../../middleware');
 
 const { campgroundJoiSchema } = require('../schema');
 const Campground = require('../models/campground');
@@ -39,7 +39,15 @@ router.get(
   '/:id',
   catchAsyncWrapper(async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id).populate('reviews');
+    const campground = await Campground.findById(id)
+      .populate({
+        path: 'reviews',
+        populate: {
+          path: 'author',
+        },
+      })
+      .populate('author');
+    console.log('campground', campground);
     if (!campground) {
       req.flash('error', 'Campground with this ID does not exist');
       return res.redirect('/campgrounds');
@@ -52,12 +60,18 @@ router.get(
 router.get(
   '/edit/:id',
   isLoggedIn,
+  isAuthor,
   catchAsyncWrapper(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
     if (!campground) {
       req.flash('error', 'Campground with this ID does not exist');
       return res.redirect('/campgrounds');
+    }
+
+    if (!campground.author.equals(req.user._id)) {
+      req.flash('error', 'You do not have permissions to do that');
+      return req.redirect(`/campgrounds/${campground._id}`);
     }
 
     res.render('campground/edit', { campground });
@@ -69,6 +83,7 @@ router.put(
   '/:id',
   validateCampground,
   isLoggedIn,
+  isAuthor,
   catchAsyncWrapper(async (req, res) => {
     const { id } = req.params;
     const updatedPorduct = await Campground.findByIdAndUpdate(id, {
@@ -87,6 +102,7 @@ router.post(
   isLoggedIn,
   catchAsyncWrapper(async (req, res) => {
     const newCamp = new Campground(req.body.campground);
+    newCamp.author = req.user._id;
     await newCamp.save();
 
     req.flash('success', 'Successfully created campground!');
@@ -98,6 +114,7 @@ router.post(
 router.delete(
   '/:id',
   isLoggedIn,
+  isAuthor,
   catchAsyncWrapper(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
