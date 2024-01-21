@@ -3,7 +3,6 @@
 <div class="row mb-5">
   <div class="col-6">
     <div class="card">
-      <a class="card-link card-body" href="/">Go back</a>
       <img class="card-img-top" src="<%= campground.image %>" height="300px" />
       <div class="card-body">
         <h1 class="card-title"><%= campground.title %></h1>
@@ -22,7 +21,9 @@
 
       <% if ( currentUser && campground.author.equals(currentUser)) {%>
       <div class="card-body">
-        <a class="btn btn-primary card-link" href="edit/<%= campground._id %>"
+        <a
+          class="btn btn-primary card-link"
+          href="/campgrounds/<%= campground._id %>/edit"
           >Edit</a
         >
         <form

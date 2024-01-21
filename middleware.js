@@ -1,5 +1,7 @@
 const Campground = require('./src/models/campground');
 const Review = require('./src/models/review');
+const { campgroundJoiSchema, reviewJoiSchema } = require('./src/schema');
+const ExpressError = require('./src/utils/ExpressError');
 
 const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -41,4 +43,34 @@ const isReviewAuthor = async (req, res, next) => {
   next();
 };
 
-module.exports = { isLoggedIn, storeReturnTo, isAuthor, isReviewAuthor };
+const validateCampground = (req, res, next) => {
+  const { error } = campgroundJoiSchema.validate(req.body);
+  console.log('req.body', req.body);
+  if (error) {
+    const message = error.details.map((el) => el.message).join(',');
+
+    throw new ExpressError('400', message);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewJoiSchema.validate(req.body);
+  if (error) {
+    const message = error.details.map((el) => el.message).join(',');
+
+    throw new ExpressError('400', message);
+  } else {
+    next();
+  }
+};
+
+module.exports = {
+  isLoggedIn,
+  storeReturnTo,
+  isAuthor,
+  isReviewAuthor,
+  validateCampground,
+  validateReview,
+};
