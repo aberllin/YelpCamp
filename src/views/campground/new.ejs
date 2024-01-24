@@ -1,7 +1,13 @@
 <% layout('layouts/boilerplate')%>
 <div class="container-md mx-auto mb-5" style="max-width: 600px">
   <h1 class="text-center">Add new camp</h1>
-  <form action="/campgrounds" method="POST" novalidate class="validated-form">
+  <form
+    action="/campgrounds"
+    method="POST"
+    novalidate
+    class="validated-form"
+    enctype="multipart/form-data"
+  >
     <div class="d-flex flex-column gap-3 container-fluid">
       <div>
         <label class="form-label" for="title">Title:</label>
@@ -29,21 +35,22 @@
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div>
-        <label class="form-label" for="image">Image URL:</label>
+        <label class="form-label" for="image">Upload images:</label>
         <input
           class="form-control"
-          type="text"
+          type="file"
           id="image"
-          name="campground[image]"
+          name="image"
           placeholder="http://..."
           required
+          multiple
         />
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div>
         <label class="form-label" for="price">Price:</label>
         <div class="input-group">
-          <span class="input-group-text" id="price">$</span>
+          <span class="input-group-text">$</span>
           <input
             aria-label="Price"
             aria-describedby="price"

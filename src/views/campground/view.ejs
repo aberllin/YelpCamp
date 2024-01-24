@@ -1,9 +1,42 @@
 <% layout('layouts/boilerplate')%>
+<link rel="stylesheet" href="/css/stars.css" />
 
 <div class="row mb-5">
   <div class="col-6">
     <div class="card">
-      <img class="card-img-top" src="<%= campground.image %>" height="300px" />
+      <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner">
+          <% campground.images.map((image, index) => { %>
+          <div
+            class="carousel-item <%= index === 0 ? 'active' : ''%>""
+          >
+            <img src="<%= image.url %>" class="d-block w-100" alt="" />
+          </div>
+
+          <% }) %>
+        </div>
+        <% if (campground.images.length > 1) { %>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <% } %>
+      </div>
+
       <div class="card-body">
         <h1 class="card-title"><%= campground.title %></h1>
         <p class="card-text"><%= campground.description %></p>
@@ -45,19 +78,23 @@
       action="/campgrounds/<%= campground._id %>/reviews"
       method="POST"
       novalidate
-      class="validated-form"
+      class="validated-form mb-3"
     >
       <div>
-        <label class="form-label" for="review[rating]">Rating:</label>
-        <input
-          class="form-range"
-          type="range"
-          id="rating"
-          name="review[rating]"
-          min="1"
-          max="5"
-          required
-        />
+        <div class="rating-container" id="rating-container">
+          <!-- Use a hidden input to store the selected rating -->
+          <input
+            type="hidden"
+            id="rating-input"
+            name="review[rating]"
+            value="0"
+          />
+          <span class="star" data-value="1">&#9733;</span>
+          <span class="star" data-value="2">&#9733;</span>
+          <span class="star" data-value="3">&#9733;</span>
+          <span class="star" data-value="4">&#9733;</span>
+          <span class="star" data-value="5">&#9733;</span>
+        </div>
       </div>
       <div>
         <label class="form-label" for="body">Review:</label>
@@ -75,12 +112,19 @@
       </div>
     </form>
     <% } %> <% for (let review of campground.reviews) { %>
-    <div class="card my-3">
+    <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">Rating: <%= review.rating %></h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          By <%= review.author.username %>
-        </h6>
+        <h5 class="card-subtitle mb-2">By <%= review.author.username %></h5>
+
+        <div class="rating-container-readOnly">
+          <% for (let i = 1; i <= 5; i++) { %>
+          <span
+            class="star-readOnly <%= i <= review.rating ? 'active' : '' %> no-hover"
+            >&#9733;</span
+          >
+          <% } %>
+        </div>
+
         <p class="card-text">Review: <%= review.body %></p>
         <% if ( currentUser && review.author.equals(currentUser)) {%>
         <form
@@ -95,3 +139,4 @@
     <% } %>
   </div>
 </div>
+<script src="/js/starRating.js"></script>
