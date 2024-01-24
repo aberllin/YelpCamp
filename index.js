@@ -66,7 +66,7 @@ app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Home');
+  res.render('home');
 });
 
 /** For the unhandled routes send Page is not found error to the next middleware */
