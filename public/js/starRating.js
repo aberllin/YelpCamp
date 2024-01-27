@@ -39,4 +39,4 @@ document.addEventListener('DOMContentLoaded', function () {
       star.classList.toggle('active', index < value);
     });
   }
-})();
+});
