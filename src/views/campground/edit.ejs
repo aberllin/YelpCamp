@@ -7,6 +7,7 @@
     method="POST"
     novalidate
     class="validated-form"
+    enctype="multipart/form-data"
   >
     <div class="d-flex flex-column gap-3 container-fluid">
       <div>
@@ -38,14 +39,32 @@
         <label class="form-label" for="image">Image URL:</label>
         <input
           class="form-control"
-          type="text"
+          type="file"
           id="image"
-          name="campground[image]"
+          name="image"
           placeholder="http://..."
           value="<%= campground.image %>"
           required
+          multiple
         />
         <div class="valid-feedback">Looks good!</div>
+        <div class="mb-3 d-flex">
+          <% campground.images.forEach(function(image, i) { %>
+          <div>
+            <img src="<%=image.thumbnail %>" class="img-thumbnail" alt="" />
+            <div class="form-check-inline d-flex text-danger">
+              <input
+                type="checkbox"
+                id="image-<%=i%>"
+                name="deleteImages[]"
+                value="<%=image.filename%>"
+              />
+
+              <label for="image-<%=i%>">x</label>
+            </div>
+          </div>
+          <% })%>
+        </div>
       </div>
       <div>
         <label class="form-label" for="price">Price:</label>
