@@ -1,4 +1,4 @@
-const camp = JSON.parse(campground);
+const camp = campground;
 const coordinates = camp.geometry.coordinates;
 
 mapboxgl.accessToken = mapboxToken;
