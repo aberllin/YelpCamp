@@ -24,18 +24,14 @@ const seedDB = async () => {
       title: `${chooseRandom(descriptors)} ${chooseRandom(places)}`,
       images: [
         {
-          url: 'https://res.cloudinary.com/dipjyyshp/image/upload/v1706027527/YelpCamp/j64mvcy2vjvyjbl4cs8y.jpg',
+          url: 'https://res.cloudinary.com/dipjyyshp/image/upload/v1706359699/YelpCamp/kevin-schmid--grs8iMGqQE-unsplash_t3z0u1.jpg',
           filename: 'YelpCamp/j64mvcy2vjvyjbl4cs8y',
         },
-        {
-          url: 'https://res.cloudinary.com/dipjyyshp/image/upload/v1706027530/YelpCamp/xvl27aoqoveylaeicch7.jpg',
-          filename: 'YelpCamp/xvl27aoqoveylaeicch7',
-        },
-        {
-          url: 'https://res.cloudinary.com/dipjyyshp/image/upload/v1706028001/YelpCamp/mzrdtocvwuygshtfttqk.jpg',
-          filename: 'YelpCamp/mzrdtocvwuygshtfttqk',
-        },
       ],
+      geometry: {
+        type: 'Point',
+        coordinates: [30.5, 50.5],
+      },
       author: '65abc0420ec1346a067f7627',
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',

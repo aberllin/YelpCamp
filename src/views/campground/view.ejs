@@ -71,7 +71,8 @@
     </div>
   </div>
 
-  <div class="col-6">
+  <div class="col-6">  
+    <div id='map' style='width: 400px; height: 300px;'></div>
     <% if (currentUser) { %>
     <h3>Leave a review</h3>
     <form
@@ -140,3 +141,10 @@
   </div>
 </div>
 <script src="/js/starRating.js"></script>
+<script>
+  const mapboxToken = '<%- process.env.MAPBOX_TOKEN %>';
+  const campground = '<%- JSON.stringify(campground) %>';
+ 
+</script>
+<script src="/js/generateMap.js"></script>
+  
