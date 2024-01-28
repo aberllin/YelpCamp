@@ -16,6 +16,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./src/models/user');
+const mongoSanitize = require('express-mongo-sanitize');
 
 /** ----------- MONGOOSE CONNECTION ----------- */
 const dbName = 'yelp-camp';
@@ -31,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+// Prevent mongo injection
+app.use(mongoSanitize());
 
 const sessionConfig = {
   secret: 'thisismysecret!',
