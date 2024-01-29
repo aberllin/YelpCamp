@@ -5,7 +5,7 @@ const {
   isLoggedIn,
   isReviewAuthor,
   validateReview,
-} = require('../../middleware');
+} = require('../../middlewareFns');
 const reviewControllers = require('../controllers/review');
 
 router.post(

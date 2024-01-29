@@ -4,7 +4,7 @@ const {
   isLoggedIn,
   isAuthor,
   validateCampground,
-} = require('../../middleware');
+} = require('../../middlewareFns');
 const catchAsyncWrapper = require('../utils/catchAsyncWrapper');
 const campgroundControllers = require('../controllers/campground');
 const multer = require('multer');

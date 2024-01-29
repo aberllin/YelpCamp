@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 const User = require('../models/user');
 const catchAsyncWrapper = require('../utils/catchAsyncWrapper');
 const passport = require('passport');
-const { storeReturnTo } = require('../../middleware');
+const { storeReturnTo } = require('../../middlewareFns');
 const userControllers = require('../controllers/user');
 
 router
