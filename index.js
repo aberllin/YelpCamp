@@ -21,17 +21,16 @@ const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
 
 /** ----------- MONGOOSE CONNECTION ----------- */
-// const dbUrl = process.env.DB_ATLAS;
-const dbName = 'yelp-camp';
-const dbUrl = `mongodb://localhost:27017/${dbName}`;
+const dbUrl = process.env.API_ENDPOINT || `mongodb://localhost:27017/yelp-camp`;
 mongoose.connect(dbUrl);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error'));
 db.once('open', () => console.log('Database connected!'));
+const storeSecret = process.env.STORE_SECRET || 'thisismysecret!';
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   touchAfter: 24 * 3600,
-  secret: 'thisismysecret',
+  secret: storeSecret,
 });
 
 /** ----------- EXPRESS ----------- */
@@ -44,10 +43,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Prevent mongo injection
 app.use(mongoSanitize());
 
+const sessionSecret = process.env.SESSION_SECRET || 'mysessionsecret!';
+
 const sessionConfig = {
   store,
   name: 'my-session',
-  secret: 'thisismysecret!',
+  secret: sessionSecret,
   // secure: true,
   resave: false,
   saveUninitialized: true,
@@ -101,6 +102,7 @@ app.use((err, req, res, next) => {
   res.render('error', { err });
 });
 
-app.listen(3000, () => {
-  console.log('LISTENING ON PORT 3000!');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`LISTENING ON PORT ${port}!`);
 });
