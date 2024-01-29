@@ -45,7 +45,7 @@ const isReviewAuthor = async (req, res, next) => {
 
 const validateCampground = (req, res, next) => {
   const { error } = campgroundJoiSchema.validate(req.body);
-  console.log('req.body', req.body);
+
   if (error) {
     const message = error.details.map((el) => el.message).join(',');
 
