@@ -50,7 +50,12 @@
         <div class="mb-3 d-flex">
           <% campground.images.forEach(function(image, i) { %>
           <div>
-            <img src="<%=image.thumbnail %>" class="img-thumbnail" alt="" />
+            <img
+              crossorigin="anonymous"
+              src="<%=image.thumbnail %>"
+              class="img-thumbnail"
+              alt=""
+            />
             <div class="form-check-inline d-flex text-danger">
               <input
                 type="checkbox"
