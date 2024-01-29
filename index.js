@@ -16,13 +16,23 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./src/models/user');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
 
 /** ----------- MONGOOSE CONNECTION ----------- */
+// const dbUrl = process.env.DB_ATLAS;
 const dbName = 'yelp-camp';
-mongoose.connect(`mongodb://localhost:27017/${dbName}`);
+const dbUrl = `mongodb://localhost:27017/${dbName}`;
+mongoose.connect(dbUrl);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error'));
 db.once('open', () => console.log('Database connected!'));
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 3600,
+  secret: 'thisismysecret',
+});
 
 /** ----------- EXPRESS ----------- */
 const app = express();
@@ -31,9 +41,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+// Prevent mongo injection
+app.use(mongoSanitize());
 
 const sessionConfig = {
+  store,
+  name: 'my-session',
   secret: 'thisismysecret!',
+  // secure: true,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -43,6 +58,7 @@ const sessionConfig = {
   },
 };
 app.use(session(sessionConfig));
+app.use(helmet({ contentSecurityPolicy: false }));
 
 /** PASSPORT SHINANNIGANS  */
 app.use(passport.initialize());
