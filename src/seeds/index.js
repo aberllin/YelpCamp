@@ -3,6 +3,18 @@ const Campground = require('../models/campground');
 const cities = require('./cities');
 const { places, descriptors } = require('./helpers');
 
+const axios = require('axios');
+
+const getRandomImageUrl = async () => {
+  const response = await axios.get(
+    'https://source.unsplash.com/random/500x300/?camping',
+    {
+      responseType: 'json',
+    },
+  );
+  return response.request.res.responseUrl;
+};
+
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
 const db = mongoose.connection;
@@ -16,7 +28,8 @@ const chooseRandom = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i <= 300; i++) {
+  for (let i = 0; i <= 200; i++) {
+    const imageUrl = await getRandomImageUrl();
     const random1000 = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
@@ -24,8 +37,8 @@ const seedDB = async () => {
       title: `${chooseRandom(descriptors)} ${chooseRandom(places)}`,
       images: [
         {
-          url: 'https://res.cloudinary.com/dipjyyshp/image/upload/v1706359699/YelpCamp/kevin-schmid--grs8iMGqQE-unsplash_t3z0u1.jpg',
-          filename: 'YelpCamp/j64mvcy2vjvyjbl4cs8y',
+          url: imageUrl,
+          filename: `YelpCamp/${imageUrl}`,
         },
       ],
       geometry: {
