@@ -87,7 +87,7 @@ This guide will help you set up and install the required dependencies to run Yel
 - Node.js (version 18.19.0 or higher)
 - npm (Node Package Manager)
 
-### Installation steps
+### Installation 
 
 1. Clone the Repository:
 ```sh
